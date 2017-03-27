@@ -1,0 +1,1 @@
+db.user.remove({"email":"pearsonadmin@pearson.com"});

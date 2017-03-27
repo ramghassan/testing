@@ -1,0 +1,40 @@
+{
+  "hapi": {
+    "port": 443,
+    "host": "127.0.0.1",
+    "logs": "/opt/pulseServers/logs",
+    "tlsRejectUnauthorized" : "0"
+  },
+  "swagger":{
+    "baseURL": "https://pulse-gab.noip.me:443"
+  },
+  "logger" : {
+    "filename": "/opt/pulseServers/node-pulse-gab.log",
+    "level": "info"
+  },
+  "redis": {
+    "port": 6379,
+    "host": "localhost",
+    "db" : 1,
+    "password": "$eC8e7"
+  },
+  "mongo": {
+    "url":  "mongodb://pulse-gab.noip.me:27017/node-pulse-gab",
+    "options" :  {
+      "server": { "auto_reconnect": true, "poolSize": 10 },
+      "replset": { "readPreference": "nearest", "strategy": "ping", "rs_name": "rs01"}
+    }
+  },
+  "services": {
+    "idm": {
+      "X-OpenAM-Username":"pulseadmin",
+      "X-OpenAM-Password":"Password1$",
+      "sessionKeyName":"iplanetDirectoryPro",
+      "authURL" : "https://identity-external-int.pearson.com/auth/json/authenticate",
+      "logoutURL" : "https://identity-external-int.pearson.com/auth/json/sessions",
+      "tokenValidURL":"https://identity-external-int.pearson.com/auth/json/sessions",
+      "createURL":"https://identity-external-int.pearson.com/auth/json/pulse/pulseschool1/users/?_action=create"      
+    }
+  }
+}
+

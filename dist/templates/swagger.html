@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GAB API Documentation</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
+    <link href='{{hapiSwagger.endpoint}}/swaggerui/css/highlight.default.css' media='screen' rel='stylesheet' type='text/css'/>
+    <link href='{{hapiSwagger.endpoint}}/swaggerui/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+    <script src="{{hapiSwagger.endpoint}}/swaggerui/lib/shred.bundle.js" type="text/javascript"></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/jquery-1.x.min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/jquery.slideto.min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/jquery.wiggle.min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/handlebars-1.0.0.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/underscore-min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/backbone-min.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/swagger.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/swagger-ui.js' type='text/javascript'></script>
+    <script src='{{hapiSwagger.endpoint}}/swaggerui/lib/highlight.7.3.pack.js' type='text/javascript'></script>
+
+    {{> head}}
+
+
+    <script type="text/javascript">
+        $(function () {
+            window.swaggerUi = new SwaggerUi({
+                url: window.location.protocol + '//' + window.location.host + '{{hapiSwagger.endpoint}}',
+                dom_id: "swagger-ui-container",
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
+                onComplete: function(swaggerApi, swaggerUi){
+                    log("Loaded SwaggerUI")
+                    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+                    addApiKeyAuthorization(swaggerApi, swaggerUi);
+                },
+                onFailure: function(data) {
+                    log("Unable to Load SwaggerUI");
+                },
+                docExpansion: "list",
+                showRequestHeaders: false
+            });
+
+          function addApiKeyAuthorization(swaggerApi, swaggerUi){
+            var key = encodeURIComponent($('#input_apiKey')[0].value);
+            if(key && key.trim() != "") {
+               window.authorizations.add("api_key",
+                                         new ApiKeyAuthorization('Authorization',
+                                                                 'Bearer '+key, 'header'));
+
+            }
+          }
+
+
+          function addDeviceID(swaggerApi, swaggerUi){
+            var key = encodeURIComponent($('#input_deviceid')[0].value);
+            if(key && key.trim() != "") {
+              window.authorizations.add("deviceid",
+                                         new ApiKeyAuthorization('deviceid',
+                                                        key, 'header'));
+            }
+          }
+
+          function addAppVersion(swaggerApi, swaggerUi){
+            var key = encodeURIComponent($('#input_appVersion')[0].value);
+            if(key && key.trim() != "") {
+              window.authorizations.add("appVersion",
+                                         new ApiKeyAuthorization('appVersion',
+                                                                 key, 'header'));
+            }
+          }
+
+          $('#input_apiKey').change(addApiKeyAuthorization);
+          $('#input_deviceid').change(addDeviceID);
+          $('#input_appVersion').change(addAppVersion);
+          window.swaggerUi.load();
+        });
+    </script>
+
+    <style>
+        /* for custom page remove swaggers api info section */
+        #api_info{
+            display: none;
+        }
+      .tokenLoginWrap{
+        border:1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        width:60%;
+        margin: 20px auto;
+        font-family:sans-serif;
+      }
+      .tokenLoginWrap input[type=text]{
+        padding: 5px 10px;
+      }
+      .tokenLoginWrap span{
+        display: inline-block;
+        margin-right: 20px;
+        width: 130px;
+      }
+      .headingWrap{
+        font-weight: bold;
+        font-family: sans-serif;
+        margin: 10px;
+      }
+      .headingWrap h1{
+        margin: 10px;
+        font-family:sans-serif;
+      }
+      .headingH1{
+        font-weight:bold;
+        font-family:sans-serif;
+        margin:10px;
+        text-align:center;
+        margin: 10px auto;
+      }
+      .headingH1 h1{
+        margin-bottom: 10px;
+        font-size: 28px;
+      }
+      .headingTokenWrap{
+        padding: 20px;
+        border:1px solid #ccc;
+        border-radius: 5px;
+        width:72%;
+        margin: 10px auto;
+        background-color:#e7f0f7;
+
+      }
+    </style>
+
+ </head>
+  <body>
+    <div class="wrapper">
+      <div class="headingTokenWrap">
+        <div class="headingH1">
+          <h1>
+               {{#if hapiSwagger.info.description}}
+                  <p>{{hapiSwagger.info.description}}</p>
+              {{/if}}
+          </h1>
+        </div>
+        <header>
+         <div>
+          <form id='api_selector'>
+              <div class="tokenLoginWrap">
+              <div class='input'>
+                  <span>Access Token </span>
+                  <input placeholder="Access Token" id="input_apiKey" name="apiKey" type="text"/>
+                </div>
+                <div class='input'>
+                  <span>DeviceId</span>
+                  <input placeholder="DeviceId" id="input_deviceid" name="deviceid" type="text"/>
+                </div>
+                <div class='input'>
+                  <span>App Version</span>
+                  <input placeholder="App Version" id="input_appVersion" name="appVersion" type="text"/>
+                </div>
+                <!-- <div class='input'>
+                  <span>Access Token                                                       </span>
+                  <input placeholder="Access Token" id="input_apiKey" name="apiKey" type="text"/>
+                </div>
+                <div class='input'>
+                  <span>Device Id                                                           </span>
+                  <input placeholder="Device Id" id="input_deviceid" name="deviceid" type="text"/>
+                </div>
+                <div class='input'>
+                  <span>App Version                                                       </span>
+                  <input placeholder="App Version" id="input_appVersion" name="appVersion" type="text"/>
+                </div> -->
+            </div>
+          </form>
+          </div>
+        </header>
+      </div>
+        <div class="headingWrap">
+
+
+            <section id="swagger">
+
+                <div id="message-bar" class="swagger-ui-wrap"></div>
+                <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+
+            </section>
+            <section id="readme">
+                <h1 class="entry-title">Documentation</h1>
+                {{{markdown}}}
+            </section>
+        </div>
+
+
+     </div>
+
+  </body>
+</html>
